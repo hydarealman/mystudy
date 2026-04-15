@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>调查问卷制作 - practice1_1</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        .inline-label { display: inline; font-weight: normal; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>用户兴趣调查问卷</h2>
+    <hr>
+
+    <form action="practice1_1.html" method="post" enctype="multipart/form-data"> 
+        
+        <div class="form-group">
+            <label for="username">姓名：</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label>性别：</label>
+            <input type="radio" name="gender" value="male" id="m"><label class="inline-label" for="m">男</label>
+            <input type="radio" name="gender" value="female" id="f"><label class="inline-label" for="f">女</label>
+        </div>
+
+        <div class="form-group">
+            <label for="education">所在地：</label>
+            <select id="education" name="education">
+                <option value="highschool">利比亚</option>
+                <option value="bachelor">中国</option>
+                <option value="master">日本</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>喜欢的歌手：</label>
+            <input type="checkbox" name="hobby" value="coding" id="h1"><label class="inline-label" for="h1">张三</label>
+            <input type="checkbox" name="hobby" value="sports" id="h2"><label class="inline-label" for="h2">李四</label>
+            <input type="checkbox" name="hobby" value="music" id="h3"><label class="inline-label" for="h3">王五</label>
+        </div>
+
+        <div class="form-group">
+            <label for="avatar">你的靓照：</label>
+            <input type="file" id="avatar" name="avatar">
+        </div>
+
+        <div class="form-group">
+            <label for="feedback">个人描述：</label>
+            <textarea id="feedback" name="feedback" rows="4" cols="40"></textarea>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="提交问卷">
+            <input type="reset" value="重置内容">
+        </div>
+
+    </form>
+
+</body>
+</html>

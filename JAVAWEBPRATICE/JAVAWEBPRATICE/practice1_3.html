@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+    <style>
+        /* 简单样式，让表单好看一点，非验证重点 */
+        body { font-family: Arial; width: 600px; margin: 20px auto; }
+        .form-row { margin: 10px 0; }
+        label { display: inline-block; width: 100px; }
+        input, select { width: 200px; padding: 5px; }
+        .error { color: red; font-size: 12px; margin-left: 10px; }
+        button { margin-top: 20px; padding: 8px 20px; }
+    </style>
+</head>
+<body>
+    <h2>用户注册</h2>
+    <form id="regForm" onsubmit="return validateForm()">
+        <!-- 账号 -->
+        <div class="form-row">
+            <label>登录账号：</label>
+            <input type="text" id="username" name="username">
+            <span class="error" id="usernameError"></span>
+        </div>
+        <!-- 密码 -->
+        <div class="form-row">
+            <label>密码：</label>
+            <input type="password" id="password" name="password">
+            <span class="error" id="passwordError"></span>
+        </div>
+        <!-- 确认密码 -->
+        <div class="form-row">
+            <label>确认密码：</label>
+            <input type="password" id="confirmPwd" name="confirmPwd">
+            <span class="error" id="confirmError"></span>
+        </div>
+        <!-- 姓名 -->
+        <div class="form-row">
+            <label>姓名：</label>
+            <input type="text" id="fullname" name="fullname">
+            <span class="error" id="nameError"></span>
+        </div>
+        <!-- 身份证号 -->
+        <div class="form-row">
+            <label>身份证号码：</label>
+            <input type="text" id="idcard" name="idcard" maxlength="18">
+            <span class="error" id="idcardError"></span>
+        </div>
+        <!-- 出生年月日 -->
+        <div class="form-row">
+            <label>出生年月日：</label>
+            <input type="text" id="birthday" name="birthday" placeholder="yyyy-mm-dd">
+            <span class="error" id="birthdayError"></span>
+        </div>
+        <!-- 住址 -->
+        <div class="form-row">
+            <label>住址：</label>
+            <input type="text" id="address" name="address">
+            <span class="error" id="addressError"></span>
+        </div>
+        <!-- 邮编 -->
+        <div class="form-row">
+            <label>邮编：</label>
+            <input type="text" id="zipcode" name="zipcode" maxlength="6">
+            <span class="error" id="zipError"></span>
+        </div>
+        <!-- E-mail -->
+        <div class="form-row">
+            <label>E-mail：</label>
+            <input type="text" id="email" name="email">
+            <span class="error" id="emailError"></span>
+        </div>
+        <div class="form-row">
+            <button type="submit">注册</button>
+            <button type="reset">重置</button>
+        </div>
+    </form>
+
+    <script>
+        // 所有验证规则写在这里
+        function validateForm() {
+            // 1. 获取各字段的值
+            var username = document.getElementById("username").value.trim();
+            var password = document.getElementById("password").value;
+            var confirmPwd = document.getElementById("confirmPwd").value;
+            var fullname = document.getElementById("fullname").value.trim();
+            var idcard = document.getElementById("idcard").value.trim();
+            var birthday = document.getElementById("birthday").value.trim();
+            var address = document.getElementById("address").value.trim();
+            var zipcode = document.getElementById("zipcode").value.trim();
+            var email = document.getElementById("email").value.trim();
+
+            // 清除所有旧的错误提示
+            clearErrors();
+
+            // 2. 开始逐项验证，遇到错误就 alert 并返回 false
+
+            // 验证账号：字母数字，且以字母开头
+            var usernamePattern = /^[A-Za-z][A-Za-z0-9]*$/;
+            if (username === "") {
+                showError("usernameError", "账号不能为空");
+                alert("账号不能为空");
+                document.getElementById("username").focus();
+                return false;
+            }
+            if (!usernamePattern.test(username)) {
+                showError("usernameError", "账号必须以字母开头，只能包含字母和数字");
+                alert("账号必须以字母开头，只能包含字母和数字");
+                document.getElementById("username").focus();
+                return false;
+            }
+
+            // 验证密码：8位以上，且包含至少一个非字母非数字的字符
+            if (password === "") {
+                showError("passwordError", "密码不能为空");
+                alert("密码不能为空");
+                document.getElementById("password").focus();
+                return false;
+            }
+            if (password.length < 8) {
+                showError("passwordError", "密码长度至少8位");
+                alert("密码长度至少8位");
+                document.getElementById("password").focus();
+                return false;
+            }
+            // 检查是否包含非字母数字字符
+            var hasSpecial = /[^A-Za-z0-9]/.test(password);
+            if (!hasSpecial) {
+                showError("passwordError", "密码必须包含至少一个特殊字符（如 !@#$ 等）");
+                alert("密码必须包含至少一个特殊字符（如 !@#$ 等）");
+                document.getElementById("password").focus();
+                return false;
+            }
+
+            // 确认密码
+            if (password !== confirmPwd) {
+                showError("confirmError", "两次输入的密码不一致");
+                alert("两次输入的密码不一致");
+                document.getElementById("confirmPwd").focus();
+                return false;
+            }
+
+            // 姓名：非空即可（可自行增加规则，比如只允许汉字）
+            if (fullname === "") {
+                showError("nameError", "姓名不能为空");
+                alert("姓名不能为空");
+                document.getElementById("fullname").focus();
+                return false;
+            }
+
+            // 身份证号：18位，并且与出生日期匹配
+            if (idcard === "") {
+                showError("idcardError", "身份证号不能为空");
+                alert("身份证号不能为空");
+                document.getElementById("idcard").focus();
+                return false;
+            }
+            if (!/^\d{17}[\dXx]$/.test(idcard)) {
+                showError("idcardError", "身份证号必须是18位（最后一位可以是数字或X）");
+                alert("身份证号必须是18位（最后一位可以是数字或X）");
+                document.getElementById("idcard").focus();
+                return false;
+            }
+            // 提取身份证中的出生日期（第7-14位：yyyymmdd）
+            var idcardYear = idcard.substring(6, 10);
+            var idcardMonth = idcard.substring(10, 12);
+            var idcardDay = idcard.substring(12, 14);
+            var idcardBirth = idcardYear + "-" + idcardMonth + "-" + idcardDay;
+
+            // 验证出生年月日字段的格式
+            var birthdayPattern = /^\d{4}-\d{2}-\d{2}$/;
+            if (birthday === "") {
+                showError("birthdayError", "出生年月日不能为空");
+                alert("出生年月日不能为空");
+                document.getElementById("birthday").focus();
+                return false;
+            }
+            if (!birthdayPattern.test(birthday)) {
+                showError("birthdayError", "出生年月日格式必须为 yyyy-mm-dd");
+                alert("出生年月日格式必须为 yyyy-mm-dd");
+                document.getElementById("birthday").focus();
+                return false;
+            }
+            // 检查身份证中的出生日期是否与输入的生日一致
+            if (idcardBirth !== birthday) {
+                showError("idcardError", "身份证号中的出生日期与输入的出生年月日不符");
+                alert("身份证号中的出生日期与输入的出生年月日不符");
+                document.getElementById("idcard").focus();
+                return false;
+            }
+
+            // 住址：非空（可以再加长度限制）
+            if (address === "") {
+                showError("addressError", "住址不能为空");
+                alert("住址不能为空");
+                document.getElementById("address").focus();
+                return false;
+            }
+
+            // 邮编：6位数字
+            if (zipcode === "") {
+                showError("zipError", "邮编不能为空");
+                alert("邮编不能为空");
+                document.getElementById("zipcode").focus();
+                return false;
+            }
+            if (!/^\d{6}$/.test(zipcode)) {
+                showError("zipError", "邮编必须为6位数字");
+                alert("邮编必须为6位数字");
+                document.getElementById("zipcode").focus();
+                return false;
+            }
+
+            // E-mail 基本格式：包含 @ 和 .
+            if (email === "") {
+                showError("emailError", "E-mail不能为空");
+                alert("E-mail不能为空");
+                document.getElementById("email").focus();
+                return false;
+            }
+            // 简单的正则：至少含有 @ 和 .，且不在开头结尾
+            var emailPattern = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                showError("emailError", "E-mail格式不正确（应包含@和域名，如 abc@example.com）");
+                alert("E-mail格式不正确");
+                document.getElementById("email").focus();
+                return false;
+            }
+
+            // 所有验证通过
+            alert("所有信息验证通过！可以提交。");
+            return true;  // 允许表单提交（实际中会提交到服务器）
+        }
+
+        // 辅助函数：显示具体字段的错误信息
+        function showError(elementId, message) {
+            document.getElementById(elementId).innerText = message;
+        }
+
+        // 清除所有错误信息
+        function clearErrors() {
+            var errorSpans = document.querySelectorAll('.error');
+            for (var i = 0; i < errorSpans.length; i++) {
+                errorSpans[i].innerText = "";
+            }
+        }
+    </script>
+</body>
+</html>
